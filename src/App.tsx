@@ -68,7 +68,7 @@ const translations = {
     titleHighlight: 'Moyenne',
     homeSubtitle: 'Génie Civil',
     homeDescription: 'Choisissez le calculateur à ouvrir.',
-    selectorHint: 'Même thème, même logique, un calcul exact.',
+    selectorHint: 'Choisissez votre calculateur de notes.',
     startButton: 'Ouvrir',
     backHome: 'Retour',
     modulesTitle: 'Modules du semestre',
@@ -140,7 +140,7 @@ const translations = {
     titleHighlight: 'Calculator',
     homeSubtitle: 'Civil Engineering',
     homeDescription: 'Choose the calculator you want to open.',
-    selectorHint: 'Same theme, same logic, exact calculation.',
+    selectorHint: 'Choose your grade calculator.',
     startButton: 'Open',
     backHome: 'Back',
     modulesTitle: 'Semester modules',
@@ -212,7 +212,7 @@ const translations = {
     titleHighlight: 'المعدل',
     homeSubtitle: 'الهندسة المدنية',
     homeDescription: 'اختر الحاسبة التي تريد فتحها.',
-    selectorHint: 'نفس التصميم ونفس المنطق مع حساب دقيق.',
+    selectorHint: 'اختر حاسبة العلامات المناسبة.',
     startButton: 'فتح',
     backHome: 'رجوع',
     modulesTitle: 'وحدات الفصل',
@@ -944,16 +944,16 @@ function App() {
                     <p className="text-ce-concrete mb-5">
                       {pageId === 's5'
                         ? lang === 'ar'
-                          ? 'حاسبة الفصل الخامس الحالية بعد تصحيح المنطق الحسابي.'
+                          ? 'احسب معدل الفصل الخامس حسب معاملات ومواد السداسي.'
                           : lang === 'en'
-                          ? 'Current semester calculator with corrected calculation logic.'
-                          : 'Calculatrice actuelle du semestre corrigée avec une logique exacte.'
+                          ? 'Calculate your Semester 5 average using the official module weights.'
+                          : 'Calculez votre moyenne du semestre 5 selon les coefficients officiels des modules.'
                         : pageId === 's6'
                         ? lang === 'ar'
-                          ? 'نفس الواجهة مع وحدات الفصل السادس والحساب اللحظي.'
+                          ? 'احسب معدل الفصل السادس حسب معاملات ومواد السداسي.'
                           : lang === 'en'
-                          ? 'Same interface with Semester 6 modules and live calculations.'
-                          : 'La même interface avec les modules du semestre 6 et un calcul en direct.'
+                          ? 'Calculate your Semester 6 average using the official module weights.'
+                          : 'Calculez votre moyenne du semestre 6 selon les coefficients officiels des modules.'
                         : t.annualCardDescription}
                     </p>
 
