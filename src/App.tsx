@@ -22,6 +22,7 @@ import {
 import './App.css'
 
 type Language = 'fr' | 'en' | 'ar'
+type PageId = 's5' | 's6' | 'annual'
 type SemesterId = 's5' | 's6'
 type GradeField = 'td' | 'tp' | 'exam'
 type ModuleNameKey =
@@ -66,7 +67,7 @@ const translations = {
     title: 'Calculatrice',
     titleHighlight: 'Moyenne',
     homeSubtitle: 'Génie Civil',
-    homeDescription: 'Choisissez le semestre à ouvrir.',
+    homeDescription: 'Choisissez le calculateur à ouvrir.',
     selectorHint: 'Même thème, même logique, un calcul exact.',
     startButton: 'Ouvrir',
     backHome: 'Retour',
@@ -87,13 +88,19 @@ const translations = {
     completedModules: 'Modules complets',
     validation: 'Validation',
     precision: 'Précision',
-    precisionDesc: 'Aucun arrondi intermédiaire, uniquement un affichage final à 2 décimales.',
+    precisionDesc: 'Calcul exact basé sur les coefficients officiels du programme.',
     structure: 'Structure',
-    structureDesc: 'Le même design est conservé pour le semestre 5, le semestre 6 et la page de sélection.',
+    structureDesc: 'Organisation claire des modules par catégorie et coefficient.',
     performance: 'Performance',
-    performanceDesc: 'Calcul en temps réel, champs vides sûrs et aucune valeur NaN.',
+    performanceDesc: 'Suivez votre progression en temps réel semestre après semestre.',
     footerTitle: 'Calculatrice Moyenne',
     footerSubtitle: 'Génie Civil',
+    annualTitle: 'Moyenne Annuelle',
+    annualDescription: 'Saisissez les moyennes des semestres 5 et 6. La moyenne annuelle = (S5 + S6) / 2.',
+    semester5Average: 'Moyenne Semestre 5',
+    semester6Average: 'Moyenne Semestre 6',
+    annualAverageLabel: 'Votre moyenne annuelle',
+    annualCardDescription: 'Calculez la moyenne annuelle à partir des moyennes des semestres 5 et 6.',
     gradeLabels: {
       excellent: 'Excellent',
       veryGood: 'Très Bien',
@@ -101,9 +108,10 @@ const translations = {
       pass: 'Passable',
       fail: 'Insuffisant'
     },
-    semesterNames: {
+    pageNames: {
       s5: 'Semestre 5',
-      s6: 'Semestre 6'
+      s6: 'Semestre 6',
+      annual: 'Moyenne Annuelle'
     },
     moduleNames: {
       beton2: 'Béton Armé 2',
@@ -131,7 +139,7 @@ const translations = {
     title: 'Grade',
     titleHighlight: 'Calculator',
     homeSubtitle: 'Civil Engineering',
-    homeDescription: 'Choose the semester you want to open.',
+    homeDescription: 'Choose the calculator you want to open.',
     selectorHint: 'Same theme, same logic, exact calculation.',
     startButton: 'Open',
     backHome: 'Back',
@@ -152,13 +160,19 @@ const translations = {
     completedModules: 'Completed modules',
     validation: 'Validation',
     precision: 'Precision',
-    precisionDesc: 'No intermediate rounding, only final 2-decimal display.',
+    precisionDesc: 'Exact calculation based on official program coefficients.',
     structure: 'Structure',
-    structureDesc: 'The same design is kept for Semester 5, Semester 6, and the selection page.',
+    structureDesc: 'Clear organization of modules by category and coefficient.',
     performance: 'Performance',
-    performanceDesc: 'Real-time calculation, safe empty fields, and no NaN values.',
+    performanceDesc: 'Track your progress in real time semester after semester.',
     footerTitle: 'Grade Calculator',
     footerSubtitle: 'Civil Engineering',
+    annualTitle: 'Annual Average',
+    annualDescription: 'Enter Semester 5 and Semester 6 averages. Annual average = (S5 + S6) / 2.',
+    semester5Average: 'Semester 5 Average',
+    semester6Average: 'Semester 6 Average',
+    annualAverageLabel: 'Your annual average',
+    annualCardDescription: 'Calculate the annual average from Semester 5 and Semester 6 averages.',
     gradeLabels: {
       excellent: 'Excellent',
       veryGood: 'Very Good',
@@ -166,9 +180,10 @@ const translations = {
       pass: 'Pass',
       fail: 'Fail'
     },
-    semesterNames: {
+    pageNames: {
       s5: 'Semester 5',
-      s6: 'Semester 6'
+      s6: 'Semester 6',
+      annual: 'Annual Average'
     },
     moduleNames: {
       beton2: 'Reinforced Concrete 2',
@@ -196,7 +211,7 @@ const translations = {
     title: 'حاسبة',
     titleHighlight: 'المعدل',
     homeSubtitle: 'الهندسة المدنية',
-    homeDescription: 'اختر الفصل الذي تريد فتحه.',
+    homeDescription: 'اختر الحاسبة التي تريد فتحها.',
     selectorHint: 'نفس التصميم ونفس المنطق مع حساب دقيق.',
     startButton: 'فتح',
     backHome: 'رجوع',
@@ -217,13 +232,19 @@ const translations = {
     completedModules: 'وحدات مكتملة',
     validation: 'النجاح',
     precision: 'الدقة',
-    precisionDesc: 'بدون أي تقريب وسيط، فقط عرض نهائي بمنزلتين عشريتين.',
+    precisionDesc: 'حساب دقيق بناءً على معاملات البرنامج الرسمية.',
     structure: 'البنية',
-    structureDesc: 'تم الحفاظ على نفس التصميم للفصل الخامس والفصل السادس وصفحة الاختيار.',
+    structureDesc: 'تنظيم واضح للوحدات حسب الفئة والمعامل.',
     performance: 'الأداء',
-    performanceDesc: 'حساب فوري، معالجة آمنة للحقول الفارغة، وبدون قيم NaN.',
+    performanceDesc: 'تتبع تقدمك في الوقت الفعلي من فصل إلى آخر.',
     footerTitle: 'حاسبة المعدل',
     footerSubtitle: 'الهندسة المدنية',
+    annualTitle: 'المعدل السنوي',
+    annualDescription: 'أدخل معدلي الفصل الخامس والفصل السادس. المعدل السنوي = (ف5 + ف6) / 2.',
+    semester5Average: 'معدل الفصل الخامس',
+    semester6Average: 'معدل الفصل السادس',
+    annualAverageLabel: 'معدلك السنوي',
+    annualCardDescription: 'احسب المعدل السنوي انطلاقاً من معدلي الفصل الخامس والفصل السادس.',
     gradeLabels: {
       excellent: 'ممتاز',
       veryGood: 'جيد جداً',
@@ -231,9 +252,10 @@ const translations = {
       pass: 'مقبول',
       fail: 'راسب'
     },
-    semesterNames: {
+    pageNames: {
       s5: 'الفصل الخامس',
-      s6: 'الفصل السادس'
+      s6: 'الفصل السادس',
+      annual: 'المعدل السنوي'
     },
     moduleNames: {
       beton2: 'الخرسانة المسلحة 2',
@@ -462,7 +484,6 @@ const parseGrade = (value: string): number | null => {
 
   const num = Number(normalized)
   if (!Number.isFinite(num)) return null
-
   if (num < 0) return 0
   if (num > 20) return 20
   return num
@@ -528,6 +549,14 @@ const calculateSemesterStats = (modules: SemesterModule[], grades: ModuleGrades)
     startedModules,
     progressPercent: totalAvailableCoeff > 0 ? (countedCoeff / totalAvailableCoeff) * 100 : 0
   }
+}
+
+const calculateAnnualAverage = (s5: string, s6: string): number => {
+  const semester5 = parseGrade(s5)
+  const semester6 = parseGrade(s6)
+
+  if (semester5 === null || semester6 === null) return 0
+  return (semester5 + semester6) / 2
 }
 
 const getGradeColor = (average: number): string => {
@@ -725,10 +754,14 @@ const ModuleCard = ({
 
 function App() {
   const [lang, setLang] = useState<Language>('fr')
-  const [selectedSemester, setSelectedSemester] = useState<SemesterId | null>(null)
+  const [selectedPage, setSelectedPage] = useState<PageId | null>(null)
   const [gradesBySemester, setGradesBySemester] = useState<Record<SemesterId, ModuleGrades>>({
     s5: buildInitialGrades(semesterConfigs.s5.modules),
     s6: buildInitialGrades(semesterConfigs.s6.modules)
+  })
+  const [annualInputs, setAnnualInputs] = useState({
+    s5: '',
+    s6: ''
   })
 
   const heroRef = useRef<HTMLDivElement | null>(null)
@@ -736,12 +769,13 @@ function App() {
   const resultRef = useRef<HTMLDivElement | null>(null)
 
   const t = translations[lang]
-  const currentConfig = selectedSemester ? semesterConfigs[selectedSemester] : null
+  const currentConfig =
+    selectedPage === 's5' || selectedPage === 's6' ? semesterConfigs[selectedPage] : null
 
   const currentGrades = useMemo<ModuleGrades>(() => {
-    if (!selectedSemester) return {}
-    return gradesBySemester[selectedSemester]
-  }, [selectedSemester, gradesBySemester])
+    if (selectedPage !== 's5' && selectedPage !== 's6') return {}
+    return gradesBySemester[selectedPage]
+  }, [selectedPage, gradesBySemester])
 
   const stats = useMemo(() => {
     if (!currentConfig) {
@@ -758,6 +792,14 @@ function App() {
 
     return calculateSemesterStats(currentConfig.modules, currentGrades)
   }, [currentConfig, currentGrades])
+
+  const annualAverage = useMemo(
+    () => calculateAnnualAverage(annualInputs.s5, annualInputs.s6),
+    [annualInputs]
+  )
+
+  const annualReady =
+    parseGrade(annualInputs.s5) !== null && parseGrade(annualInputs.s6) !== null
 
   const handleGradeChange = useCallback(
     (semesterId: SemesterId, moduleId: string, field: GradeField, value: string) => {
@@ -776,16 +818,20 @@ function App() {
   )
 
   const handleReset = () => {
-    if (!selectedSemester) return
+    if (selectedPage === 's5' || selectedPage === 's6') {
+      setGradesBySemester((prev) => ({
+        ...prev,
+        [selectedPage]: buildInitialGrades(semesterConfigs[selectedPage].modules)
+      }))
+    }
 
-    setGradesBySemester((prev) => ({
-      ...prev,
-      [selectedSemester]: buildInitialGrades(semesterConfigs[selectedSemester].modules)
-    }))
+    if (selectedPage === 'annual') {
+      setAnnualInputs({ s5: '', s6: '' })
+    }
   }
 
-  const handleSelectSemester = (semesterId: SemesterId) => {
-    setSelectedSemester(semesterId)
+  const handleSelectPage = (pageId: PageId) => {
+    setSelectedPage(pageId)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -799,6 +845,21 @@ function App() {
     if (average >= 12) return t.gradeLabels.good
     if (average >= 10) return t.gradeLabels.pass
     return t.gradeLabels.fail
+  }
+
+  const handleAnnualInputChange = (field: 's5' | 's6', value: string) => {
+    if (!canAcceptInput(value)) return
+    setAnnualInputs((prev) => ({
+      ...prev,
+      [field]: value.replace(',', '.')
+    }))
+  }
+
+  const handleAnnualBlur = (field: 's5' | 's6', value: string) => {
+    setAnnualInputs((prev) => ({
+      ...prev,
+      [field]: sanitizeGradeInput(value)
+    }))
   }
 
   useEffect(() => {
@@ -825,9 +886,9 @@ function App() {
     }, heroRef)
 
     return () => ctx.revert()
-  }, [selectedSemester, lang])
+  }, [selectedPage, lang])
 
-  if (!selectedSemester) {
+  if (!selectedPage) {
     return (
       <div ref={heroRef} className="min-h-screen relative overflow-hidden bg-ce-dark text-white">
         <div className="absolute inset-0 bg-gradient-to-br from-ce-dark via-ce-gray to-ce-dark" />
@@ -859,12 +920,12 @@ function App() {
                 </p>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                {(['s5', 's6'] as SemesterId[]).map((semesterId) => (
+              <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                {(['s5', 's6', 'annual'] as PageId[]).map((pageId) => (
                   <button
-                    key={semesterId}
+                    key={pageId}
                     type="button"
-                    onClick={() => handleSelectSemester(semesterId)}
+                    onClick={() => handleSelectPage(pageId)}
                     className="selector-card ce-card glass-panel text-left p-8 group"
                   >
                     <div className="flex items-center justify-between mb-6">
@@ -877,21 +938,23 @@ function App() {
                     </div>
 
                     <h2 className="text-2xl font-bold font-poppins text-ce-dark mb-2">
-                      {t.semesterNames[semesterId]}
+                      {t.pageNames[pageId]}
                     </h2>
 
                     <p className="text-ce-concrete mb-5">
-                      {semesterId === 's5'
+                      {pageId === 's5'
                         ? lang === 'ar'
                           ? 'حاسبة الفصل الخامس الحالية بعد تصحيح المنطق الحسابي.'
                           : lang === 'en'
                           ? 'Current semester calculator with corrected calculation logic.'
                           : 'Calculatrice actuelle du semestre corrigée avec une logique exacte.'
-                        : lang === 'ar'
-                        ? 'نفس الواجهة مع وحدات الفصل السادس والحساب اللحظي.'
-                        : lang === 'en'
-                        ? 'Same interface with Semester 6 modules and live calculations.'
-                        : 'La même interface avec les modules du semestre 6 et un calcul en direct.'}
+                        : pageId === 's6'
+                        ? lang === 'ar'
+                          ? 'نفس الواجهة مع وحدات الفصل السادس والحساب اللحظي.'
+                          : lang === 'en'
+                          ? 'Same interface with Semester 6 modules and live calculations.'
+                          : 'La même interface avec les modules du semestre 6 et un calcul en direct.'
+                        : t.annualCardDescription}
                     </p>
 
                     <div className="flex items-center text-ce-yellow font-medium group-hover:translate-x-1 transition-transform">
@@ -908,9 +971,10 @@ function App() {
     )
   }
 
-  const currentSemesterName = t.semesterNames[selectedSemester]
+  const currentPageName = t.pageNames[selectedPage]
   const currentModules = currentConfig?.modules ?? []
-  const gradeColor = getGradeColor(stats.average)
+  const displayedAverage = selectedPage === 'annual' ? annualAverage : stats.average
+  const gradeColor = getGradeColor(displayedAverage)
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -922,7 +986,7 @@ function App() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-14">
             <button
               type="button"
-              onClick={() => setSelectedSemester(null)}
+              onClick={() => setSelectedPage(null)}
               className="ce-btn-secondary inline-flex items-center gap-2 self-start"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -935,7 +999,7 @@ function App() {
           <div className="text-center max-w-4xl mx-auto pb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ce-yellow/10 border border-ce-yellow/20 text-ce-yellow mb-6">
               <TrendingUp className="w-4 h-4" />
-              <span className="text-sm font-medium">{currentSemesterName}</span>
+              <span className="text-sm font-medium">{currentPageName}</span>
             </div>
 
             <h1 className="hero-title text-5xl md:text-7xl font-bold font-poppins mb-5">
@@ -943,11 +1007,11 @@ function App() {
             </h1>
 
             <p className="hero-subtitle text-xl md:text-2xl text-gray-300 mb-3">
-              {currentSemesterName} - {t.homeSubtitle}
+              {currentPageName} - {t.homeSubtitle}
             </p>
 
             <p className="hero-subtitle text-base md:text-lg text-gray-400 max-w-3xl mx-auto mb-8">
-              {t.modulesDescription}
+              {selectedPage === 'annual' ? t.annualDescription : t.modulesDescription}
             </p>
 
             <button
@@ -966,56 +1030,115 @@ function App() {
         <div className="absolute inset-0 blueprint-grid opacity-30" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-4xl font-bold font-poppins text-ce-dark mb-4">{t.modulesTitle}</h2>
-            <p className="text-lg text-ce-concrete max-w-3xl mx-auto">{t.modulesDescription}</p>
-          </div>
-
-          <div className="ce-card p-6 mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-              <div>
-                <h3 className="text-lg font-semibold text-ce-dark">{t.progress}</h3>
-                <p className="text-sm text-ce-concrete">
-                  {Math.round(stats.progressPercent)}% • {stats.countedCoeff} / {stats.totalAvailableCoeff}{' '}
-                  {t.coeffFilled}
-                </p>
+          {selectedPage === 'annual' ? (
+            <>
+              <div className="text-center mb-10">
+                <h2 className="text-4xl font-bold font-poppins text-ce-dark mb-4">{t.annualTitle}</h2>
+                <p className="text-lg text-ce-concrete max-w-3xl mx-auto">{t.annualDescription}</p>
               </div>
 
-              <div className="flex flex-wrap gap-3">
-                <button type="button" onClick={scrollToResult} className="ce-btn inline-flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4" />
-                  {t.calculateButton}
-                </button>
+              <div className="max-w-3xl mx-auto">
+                <div className="ce-card p-6 mb-8">
+                  <div className="grid md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <label className="block text-sm font-medium text-ce-gray mb-2">
+                        {t.semester5Average}
+                      </label>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        value={annualInputs.s5}
+                        onChange={(event) => handleAnnualInputChange('s5', event.target.value)}
+                        onBlur={(event) => handleAnnualBlur('s5', event.target.value)}
+                        placeholder="--"
+                        className="ce-input text-center py-3"
+                      />
+                    </div>
 
-                <button type="button" onClick={handleReset} className="ce-btn-secondary inline-flex items-center gap-2">
-                  <RotateCcw className="w-4 h-4" />
-                  {t.resetButton}
-                </button>
+                    <div>
+                      <label className="block text-sm font-medium text-ce-gray mb-2">
+                        {t.semester6Average}
+                      </label>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        value={annualInputs.s6}
+                        onChange={(event) => handleAnnualInputChange('s6', event.target.value)}
+                        onBlur={(event) => handleAnnualBlur('s6', event.target.value)}
+                        placeholder="--"
+                        className="ce-input text-center py-3"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-3 justify-center">
+                    <button type="button" onClick={scrollToResult} className="ce-btn inline-flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4" />
+                      {t.calculateButton}
+                    </button>
+
+                    <button type="button" onClick={handleReset} className="ce-btn-secondary inline-flex items-center gap-2">
+                      <RotateCcw className="w-4 h-4" />
+                      {t.resetButton}
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
+            </>
+          ) : (
+            <>
+              <div className="text-center mb-10">
+                <h2 className="text-4xl font-bold font-poppins text-ce-dark mb-4">{t.modulesTitle}</h2>
+                <p className="text-lg text-ce-concrete max-w-3xl mx-auto">{t.modulesDescription}</p>
+              </div>
 
-            <div className="h-2 bg-ce-border rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all duration-500"
-                style={{ width: `${stats.progressPercent}%` }}
-              />
-            </div>
-          </div>
+              <div className="ce-card p-6 mb-8">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-ce-dark">{t.progress}</h3>
+                    <p className="text-sm text-ce-concrete">
+                      {Math.round(stats.progressPercent)}% • {stats.countedCoeff} / {stats.totalAvailableCoeff}{' '}
+                      {t.coeffFilled}
+                    </p>
+                  </div>
 
-          <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {currentModules.map((module, index) => (
-              <ModuleCard
-                key={module.id}
-                module={module}
-                grades={currentGrades[module.id]}
-                onGradeChange={(field, value) =>
-                  handleGradeChange(selectedSemester, module.id, field, value)
-                }
-                index={index}
-                t={t}
-              />
-            ))}
-          </div>
+                  <div className="flex flex-wrap gap-3">
+                    <button type="button" onClick={scrollToResult} className="ce-btn inline-flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4" />
+                      {t.calculateButton}
+                    </button>
+
+                    <button type="button" onClick={handleReset} className="ce-btn-secondary inline-flex items-center gap-2">
+                      <RotateCcw className="w-4 h-4" />
+                      {t.resetButton}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="h-2 bg-ce-border rounded-full overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{ width: `${stats.progressPercent}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                {currentModules.map((module, index) => (
+                  <ModuleCard
+                    key={module.id}
+                    module={module}
+                    grades={currentGrades[module.id]}
+                    onGradeChange={(field, value) =>
+                      handleGradeChange(selectedPage as SemesterId, module.id, field, value)
+                    }
+                    index={index}
+                    t={t}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
 
@@ -1025,41 +1148,71 @@ function App() {
             <div className="relative z-10">
               <div className="text-center mb-10">
                 <p className="text-ce-yellow font-medium mb-3">{t.resultTitle}</p>
-                <h2 className="text-3xl md:text-4xl font-bold font-poppins mb-4">{t.yourAverage}</h2>
+                <h2 className="text-3xl md:text-4xl font-bold font-poppins mb-4">
+                  {selectedPage === 'annual' ? t.annualAverageLabel : t.yourAverage}
+                </h2>
 
                 <div className={`text-6xl md:text-7xl font-bold font-poppins mb-3 ${gradeColor}`}>
-                  <AnimatedCounter value={stats.average} />
+                  <AnimatedCounter value={displayedAverage} />
                 </div>
 
                 <p className="text-xl text-gray-300 mb-4">/20</p>
 
                 <div className="flex items-center justify-center gap-3">
-                  {stats.average >= 10 && stats.countedCoeff > 0 ? (
+                  {displayedAverage >= 10 &&
+                  (selectedPage === 'annual' ? annualReady : stats.countedCoeff > 0) ? (
                     <CheckCircle2 className="w-6 h-6 text-green-400" />
                   ) : (
                     <AlertCircle className="w-6 h-6 text-red-400" />
                   )}
-                  <span className="text-xl font-semibold">{getGradeLabel(stats.average)}</span>
+                  <span className="text-xl font-semibold">{getGradeLabel(displayedAverage)}</span>
                 </div>
               </div>
 
               <div className="grid md:grid-cols-3 gap-4">
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
-                  <div className="text-3xl font-bold text-ce-yellow mb-1">{stats.countedCoeff}</div>
-                  <div className="text-sm text-gray-300">{t.coefficients}</div>
-                </div>
+                {selectedPage === 'annual' ? (
+                  <>
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+                      <div className="text-3xl font-bold text-ce-yellow mb-1">
+                        {annualInputs.s5 || '--'}
+                      </div>
+                      <div className="text-sm text-gray-300">{t.semester5Average}</div>
+                    </div>
 
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
-                  <div className="text-3xl font-bold text-ce-yellow mb-1">{stats.completedModules}</div>
-                  <div className="text-sm text-gray-300">{t.completedModules}</div>
-                </div>
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+                      <div className="text-3xl font-bold text-ce-yellow mb-1">
+                        {annualInputs.s6 || '--'}
+                      </div>
+                      <div className="text-sm text-gray-300">{t.semester6Average}</div>
+                    </div>
 
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
-                  <div className="text-3xl font-bold text-ce-yellow mb-1">
-                    {stats.average >= 10 && stats.countedCoeff > 0 ? '✓' : '✗'}
-                  </div>
-                  <div className="text-sm text-gray-300">{t.validation}</div>
-                </div>
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+                      <div className="text-3xl font-bold text-ce-yellow mb-1">
+                        {annualReady && displayedAverage >= 10 ? '✓' : '✗'}
+                      </div>
+                      <div className="text-sm text-gray-300">{t.validation}</div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+                      <div className="text-3xl font-bold text-ce-yellow mb-1">{stats.countedCoeff}</div>
+                      <div className="text-sm text-gray-300">{t.coefficients}</div>
+                    </div>
+
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+                      <div className="text-3xl font-bold text-ce-yellow mb-1">{stats.completedModules}</div>
+                      <div className="text-sm text-gray-300">{t.completedModules}</div>
+                    </div>
+
+                    <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+                      <div className="text-3xl font-bold text-ce-yellow mb-1">
+                        {stats.average >= 10 && stats.countedCoeff > 0 ? '✓' : '✗'}
+                      </div>
+                      <div className="text-sm text-gray-300">{t.validation}</div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -1102,7 +1255,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h3 className="text-2xl font-bold font-poppins mb-2">{t.footerTitle}</h3>
           <p className="text-gray-400">
-            {t.footerSubtitle} - {currentSemesterName}
+            {t.footerSubtitle} - {currentPageName}
           </p>
         </div>
       </footer>
