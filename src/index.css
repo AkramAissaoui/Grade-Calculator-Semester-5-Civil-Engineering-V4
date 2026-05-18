@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 16%;
+    --primary: 43 100% 49%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 16%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 43 100% 49%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 43 100% 49%;
+    --radius: 0.625rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground font-inter antialiased;
+    background-color: #fafafa;
+  }
+}
+
+@layer components {
+  /* Blueprint Grid Background */
+  .blueprint-grid {
+    background-image: 
+      linear-gradient(rgba(224, 224, 224, 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(224, 224, 224, 0.5) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .blueprint-grid-dark {
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Glass Morphism */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .glass-panel-dark {
+    background: rgba(42, 42, 42, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Input Styles */
+  .ce-input {
+    @apply w-full px-4 py-3 bg-white border-2 border-ce-border rounded-lg text-ce-dark font-medium transition-all duration-300;
+    @apply focus:outline-none focus:border-ce-yellow focus:shadow-ce-input;
+    @apply placeholder:text-ce-concrete;
+  }
+
+  .ce-input:hover {
+    @apply border-ce-concrete;
+  }
+
+  /* Button Styles */
+  .ce-btn {
+    @apply px-8 py-4 bg-ce-yellow text-white font-semibold rounded-lg transition-all duration-300;
+    @apply hover:bg-amber-500 hover:shadow-ce-lg hover:-translate-y-0.5;
+    @apply active:translate-y-0 active:shadow-ce;
+  }
+
+  .ce-btn-secondary {
+    @apply px-6 py-3 bg-ce-dark text-white font-medium rounded-lg transition-all duration-300;
+    @apply hover:bg-ce-gray hover:shadow-ce;
+  }
+
+  /* Card Styles */
+  .ce-card {
+    @apply bg-white rounded-xl border border-ce-border shadow-ce transition-all duration-300;
+    @apply hover:shadow-ce-lg hover:-translate-y-1;
+  }
+
+  .ce-card-active {
+    @apply border-ce-yellow shadow-ce-lg;
+  }
+
+  /* Module Card */
+  .module-card {
+    @apply relative bg-white rounded-xl border-2 border-ce-border p-5 transition-all duration-300;
+    @apply hover:border-ce-yellow hover:shadow-ce;
+  }
+
+  .module-card::before {
+    content: '';
+    @apply absolute left-0 top-0 w-1 h-full bg-ce-yellow rounded-l-xl opacity-0 transition-opacity duration-300;
+  }
+
+  .module-card:hover::before,
+  .module-card:focus-within::before {
+    @apply opacity-100;
+  }
+
+  /* Result Display */
+  .result-display {
+    @apply relative bg-gradient-to-br from-ce-dark to-ce-gray text-white rounded-2xl p-8 overflow-hidden;
+  }
+
+  .result-display::before {
+    content: '';
+    @apply absolute inset-0 blueprint-grid-dark opacity-30;
+  }
+
+  /* Construction Line */
+  .construction-line {
+    @apply relative h-px bg-ce-border overflow-hidden;
+  }
+
+  .construction-line::after {
+    content: '';
+    @apply absolute top-0 left-0 w-20 h-full bg-ce-yellow;
+    animation: line-move 2s linear infinite;
+  }
+
+  @keyframes line-move {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(calc(100vw + 100%)); }
+  }
+
+  /* Number Input Spinners */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+  }
+
+  /* Animation Delays */
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+
+  /* Grade Colors */
+  .grade-excellent { @apply text-green-600; }
+  .grade-good { @apply text-ce-yellow; }
+  .grade-pass { @apply text-orange-500; }
+  .grade-fail { @apply text-red-500; }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+}

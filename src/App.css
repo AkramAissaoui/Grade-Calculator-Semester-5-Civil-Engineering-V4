@@ -1,0 +1,165 @@
+/* App-specific styles */
+
+/* Ensure smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hero section enhancements */
+.hero-title {
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Input focus animations */
+.ce-input:focus {
+  transform: scale(1.02);
+}
+
+/* Module card hover lift */
+.module-card {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.module-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Result display glow effect */
+.result-display {
+  box-shadow: 
+    0 20px 60px rgba(42, 42, 42, 0.3),
+    0 0 0 1px rgba(249, 174, 0, 0.1);
+}
+
+/* Button ripple effect */
+.ce-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.ce-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ce-btn:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Progress bar shimmer */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.h-2 > div {
+  background: linear-gradient(
+    90deg,
+    #f9ae00 0%,
+    #ffc447 50%,
+    #f9ae00 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Floating animation for decorative elements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Blueprint line drawing animation */
+@keyframes draw-line {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.blueprint-line {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw-line 2s ease-out forwards;
+}
+
+/* Glass morphism enhancement */
+.glass-panel {
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Card stack effect */
+.module-card:nth-child(1) { z-index: 9; }
+.module-card:nth-child(2) { z-index: 8; }
+.module-card:nth-child(3) { z-index: 7; }
+.module-card:nth-child(4) { z-index: 6; }
+.module-card:nth-child(5) { z-index: 5; }
+.module-card:nth-child(6) { z-index: 4; }
+.module-card:nth-child(7) { z-index: 3; }
+.module-card:nth-child(8) { z-index: 2; }
+.module-card:nth-child(9) { z-index: 1; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .result-display .text-7xl {
+    font-size: 4rem;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Print styles */
+@media print {
+  .ce-btn,
+  .ce-btn-secondary {
+    display: none;
+  }
+  
+  .result-display {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
