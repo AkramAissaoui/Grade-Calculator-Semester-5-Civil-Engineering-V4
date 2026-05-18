@@ -882,7 +882,7 @@ function App() {
 
                     <p className="text-ce-concrete mb-5">
                       {semesterId === 's5'
-                        ? t.lang === 'ar'
+                        ? lang === 'ar'
                           ? 'حاسبة الفصل الخامس الحالية بعد تصحيح المنطق الحسابي.'
                           : lang === 'en'
                           ? 'Current semester calculator with corrected calculation logic.'
@@ -909,6 +909,7 @@ function App() {
   }
 
   const currentSemesterName = t.semesterNames[selectedSemester]
+  const currentModules = currentConfig?.modules ?? []
   const gradeColor = getGradeColor(stats.average)
 
   return (
@@ -1002,7 +1003,7 @@ function App() {
           </div>
 
           <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {currentConfig.modules.map((module, index) => (
+            {currentModules.map((module, index) => (
               <ModuleCard
                 key={module.id}
                 module={module}
