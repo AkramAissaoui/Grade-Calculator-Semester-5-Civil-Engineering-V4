@@ -105,7 +105,22 @@ const semesterConfigs: Record<SemesterKey, SemesterModule[]> = {
   s8: buildPlaceholderModules('s8'),
 };
 
-const translations = {
+interface Translation {
+  title: string; titleHighlight: string; homeSubtitle: string; homeDescription: string;
+  selectorHint: string; startButton: string; backHome: string;
+  modulesTitle: string; modulesDescription: string;
+  progress: string; coeffFilled: string; coeff: string;
+  td: string; tp: string; exam: string; calculateButton: string;
+  resetButton: string; resultTitle: string; yourAverage: string;
+  annualAverageLabel: string; coefficients: string; modules: string;
+  completedModules: string; validation: string; precision: string; precisionDesc: string;
+  structure: string; structureDesc: string; performance: string; performanceDesc: string;
+  footerTitle: string; footerSubtitle: string; annualDescription: string; annualTab: string;
+  gradeLabels: { excellent: string; veryGood: string; good: string; pass: string; fail: string };
+  placeholderNotice: string;
+}
+
+const translations: Record<Language, Translation> = {
   fr: {
     title: 'Calculatrice', titleHighlight: 'Moyenne', homeSubtitle: 'Génie Civil',
     homeDescription: 'Choisissez votre année pour calculer votre moyenne.',
@@ -124,7 +139,7 @@ const translations = {
     annualDescription: 'Moyenne annuelle = (moyenne du 1er semestre + moyenne du 2e semestre) / 2, calculée automatiquement dès que les deux semestres ont au moins un module complet.',
     annualTab: 'Moyenne annuelle',
     gradeLabels: { excellent: 'Excellent', veryGood: 'Très Bien', good: 'Bien', pass: 'Passable', fail: 'Insuffisant' },
-    placeholderNotice: 'Modules provisoires — à remplacer par le programme officiel dès qu\'il sera disponible.',
+    placeholderNotice: "Modules provisoires — à remplacer par le programme officiel dès qu'il sera disponible.",
   },
   en: {
     title: 'Grade', titleHighlight: 'Calculator', homeSubtitle: 'Civil Engineering',
@@ -137,7 +152,7 @@ const translations = {
     resetButton: 'Reset', resultTitle: 'Result', yourAverage: 'Your semester average',
     annualAverageLabel: 'Your annual average', coefficients: 'Coefficients', modules: 'Modules',
     completedModules: 'Completed modules', validation: 'Validation', precision: 'Precision',
-    precisionDesc: 'Calculation based on each module\'s coefficient and weighting.',
+    precisionDesc: "Calculation based on each module's coefficient and weighting.",
     structure: 'Structure', structureDesc: 'Clear organization of modules by coefficient.',
     performance: 'Performance', performanceDesc: 'Track your progress semester after semester.',
     footerTitle: 'Grade Calculator', footerSubtitle: 'Civil Engineering',
@@ -166,9 +181,7 @@ const translations = {
     gradeLabels: { excellent: 'ممتاز', veryGood: 'جيد جداً', good: 'جيد', pass: 'مقبول', fail: 'ضعيف' },
     placeholderNotice: 'وحدات مؤقتة — يجب استبدالها بالبرنامج الرسمي عند توفره.',
   },
-} as const;
-
-type Translation = typeof translations['fr'];
+};
 
 const emptyGrades: Grades = { td: '', tp: '', exam: '' };
 
@@ -477,7 +490,7 @@ function App() {
             </div>
             <h1 className="hero-title text-5xl md:text-7xl font-bold font-poppins mb-5">{t.title} <span style={{ color: accent.hex }}>{t.titleHighlight}</span></h1>
             <p className="hero-subtitle text-xl md:text-2xl text-gray-300 mb-3">{currentYearLabel} - {t.homeSubtitle}</p>
-            {isPlaceholderYear && <p className="hero-subtitle text-sm max-w-2xl mx-auto mb-2" style={{ color: accent.hex }}>{t.placeholderNotice}</p>}
+            {isPlaceholderYear && <p className="hero-subtitle text-sm max-w-2xl mx-auto mb-2" style={{ color: accent.hex }}>{t.placeholderNotice}</p>}</p>
             <div className="flex items-center justify-center gap-3 mt-6">
               {(['odd', 'even', 'annual'] as SubPage[]).map((sp) => (
                 <button key={sp} type="button" onClick={() => setSubPage(sp)}
