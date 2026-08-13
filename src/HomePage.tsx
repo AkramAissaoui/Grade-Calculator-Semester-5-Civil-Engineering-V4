@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
-import { HardHat, Building2, Ruler, PenTool, DraftingCompass, Mountain, BookOpen, Calculator, ChevronDown, Globe } from 'lucide-react';
+import { HardHat, Building2, Ruler, PenTool, Mountain, Calculator, ChevronDown, Globe } from 'lucide-react';
 import './App.css';
 
 type Language = 'fr' | 'en' | 'ar';
