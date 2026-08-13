@@ -9,6 +9,7 @@ import './App.css';
 
 type Language = 'fr' | 'en' | 'ar';
 type YearId = 'y1' | 'y2' | 'y3' | 'y4';
+type SubPage = 'odd' | 'even' | 'annual';
 type SemesterKey = 's1' | 's2' | 's3' | 's4' | 's5' | 's6' | 's7' | 's8';
 type GradeField = 'td' | 'tp' | 'exam';
 
@@ -399,13 +400,6 @@ function ModuleCard({
   );
 }
 
-const yearIcons: Record<YearId, React.ReactNode> = {
-  y1: <BookOpen className="w-7 h-7" />,
-  y2: <Ruler className="w-7 h-7" />,
-  y3: <HardHat className="w-7 h-7" />,
-  y4: <Award className="w-7 h-7" />,
-};
-
 export default function App({
   year,
   lang,
@@ -541,7 +535,7 @@ export default function App({
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={gradesBySemester[oddKey]?.__annual ?? ''}
+                    value={oddStats.average ? oddStats.average.toFixed(2) : '--'}
                     onChange={() => {}}
                     placeholder="--"
                     className="ce-input text-center py-3"
@@ -553,7 +547,7 @@ export default function App({
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={gradesBySemester[evenKey]?.__annual ?? ''}
+                    value={evenStats.average ? evenStats.average.toFixed(2) : '--'}
                     onChange={() => {}}
                     placeholder="--"
                     className="ce-input text-center py-3"
