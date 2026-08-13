@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import {
   Calculator, HardHat, Building2, Ruler, PenTool, DraftingCompass, Mountain,
-  BookOpen, Languages, ChevronDown, RotateCcw, CheckCircle2, AlertCircle,
-  TrendingUp, Award, Globe, ArrowLeft,
+  BookOpen, ChevronDown, RotateCcw, CheckCircle2, AlertCircle, TrendingUp, Award, Globe, ArrowLeft,
 } from 'lucide-react';
 import './App.css';
 
 type Language = 'fr' | 'en' | 'ar';
 type YearId = 'y1' | 'y2' | 'y3' | 'y4';
-type SubPage = 'odd' | 'even' | 'annual';
 type SemesterKey = 's1' | 's2' | 's3' | 's4' | 's5' | 's6' | 's7' | 's8';
 type GradeField = 'td' | 'tp' | 'exam';
 
@@ -36,13 +35,6 @@ const yearSemesters: Record<YearId, [SemesterKey, SemesterKey]> = {
   y4: ['s7', 's8'],
 };
 
-const yearAccent: Record<YearId, { hex: string; soft: string; softer: string }> = {
-  y1: { hex: '#22c55e', soft: 'rgba(34,197,94,0.14)', softer: 'rgba(34,197,94,0.22)' },
-  y2: { hex: '#3b82f6', soft: 'rgba(59,130,246,0.14)', softer: 'rgba(59,130,246,0.22)' },
-  y3: { hex: '#eab308', soft: 'rgba(234,179,8,0.14)', softer: 'rgba(234,179,8,0.22)' },
-  y4: { hex: '#a855f7', soft: 'rgba(168,85,247,0.14)', softer: 'rgba(168,85,247,0.22)' },
-};
-
 const yearLabels: Record<Language, Record<YearId, string>> = {
   fr: { y1: 'Année 1', y2: 'Année 2', y3: 'Année 3', y4: 'Année 4' },
   en: { y1: 'Year 1', y2: 'Year 2', y3: 'Year 3', y4: 'Year 4' },
@@ -53,6 +45,13 @@ const semesterLabels: Record<Language, Record<SemesterKey, string>> = {
   fr: { s1: 'Semestre 1', s2: 'Semestre 2', s3: 'Semestre 3', s4: 'Semestre 4', s5: 'Semestre 5', s6: 'Semestre 6', s7: 'Semestre 7', s8: 'Semestre 8' },
   en: { s1: 'Semester 1', s2: 'Semester 2', s3: 'Semester 3', s4: 'Semester 4', s5: 'Semester 5', s6: 'Semester 6', s7: 'Semester 7', s8: 'Semester 8' },
   ar: { s1: 'الفصل 1', s2: 'الفصل 2', s3: 'الفصل 3', s4: 'الفصل 4', s5: 'الفصل 5', s6: 'الفصل 6', s7: 'الفصل 7', s8: 'الفصل 8' },
+};
+
+const yearAccent: Record<YearId, { hex: string; soft: string; softer: string }> = {
+  y1: { hex: '#22c55e', soft: 'rgba(34,197,94,0.14)', softer: 'rgba(34,197,94,0.22)' },
+  y2: { hex: '#3b82f6', soft: 'rgba(59,130,246,0.14)', softer: 'rgba(59,130,246,0.22)' },
+  y3: { hex: '#eab308', soft: 'rgba(234,179,8,0.14)', softer: 'rgba(234,179,8,0.22)' },
+  y4: { hex: '#a855f7', soft: 'rgba(168,85,247,0.14)', softer: 'rgba(168,85,247,0.22)' },
 };
 
 const buildPlaceholderModules = (semesterKey: string, count = 6): SemesterModule[] => {
@@ -237,7 +236,9 @@ const calculateSemesterStats = (modules: SemesterModule[], grades: ModuleGrades)
   const totalAvailableCoeff = modules.reduce((s, m) => s + m.coefficient, 0);
   return {
     average: countedCoeff > 0 ? totalWeightedSum / countedCoeff : 0,
-    countedCoeff, totalAvailableCoeff, completedModules,
+    countedCoeff,
+    totalAvailableCoeff,
+    completedModules,
     totalModules: modules.length,
     progressPercent: totalAvailableCoeff > 0 ? (countedCoeff / totalAvailableCoeff) * 100 : 0,
   };
@@ -268,9 +269,16 @@ function AnimatedCounter({ value, duration = 1200 }: { value: number; duration?:
   return <>{displayValue.toFixed(2)}</>;
 }
 
-function LanguageSwitcher({ currentLang, onLanguageChange }: { currentLang: Language; onLanguageChange: (lang: Language) => void }) {
+function LanguageSwitcher({
+  currentLang,
+  onLanguageChange,
+}: {
+  currentLang: Language;
+  onLanguageChange: (lang: Language) => void;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) setIsOpen(false);
@@ -278,25 +286,39 @@ function LanguageSwitcher({ currentLang, onLanguageChange }: { currentLang: Lang
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
   const languages: { code: Language; label: string; flag: string }[] = [
     { code: 'fr', label: 'Français', flag: 'FR' },
     { code: 'en', label: 'English', flag: 'EN' },
     { code: 'ar', label: 'العربية', flag: 'AR' },
   ];
+
   const currentLanguage = languages.find((l) => l.code === currentLang);
+
   return (
     <div className="relative" ref={dropdownRef}>
-      <button type="button" onClick={() => setIsOpen((p) => !p)}
-        className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-white transition-all duration-300 border border-white/20">
-        <Languages className="w-4 h-4" />
+      <button
+        type="button"
+        onClick={() => setIsOpen((p) => !p)}
+        className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-white transition-all duration-300 border border-white/20"
+      >
         <span className="text-sm font-medium">{currentLanguage?.label}</span>
         <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
       {isOpen && (
         <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-ce-lg border border-ce-border overflow-hidden z-50">
           {languages.map((language) => (
-            <button key={language.code} type="button" onClick={() => { onLanguageChange(language.code); setIsOpen(false); }}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${currentLang === language.code ? 'bg-ce-yellow/10 text-ce-yellow' : 'text-ce-dark hover:bg-ce-light'}`}>
+            <button
+              key={language.code}
+              type="button"
+              onClick={() => {
+                onLanguageChange(language.code);
+                setIsOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
+                currentLang === language.code ? 'bg-ce-yellow/10 text-ce-yellow' : 'text-ce-dark hover:bg-ce-light'
+              }`}
+            >
               <span className="text-xs font-semibold w-6">{language.flag}</span>
               <span className="text-sm font-medium">{language.label}</span>
             </button>
@@ -307,44 +329,69 @@ function LanguageSwitcher({ currentLang, onLanguageChange }: { currentLang: Lang
   );
 }
 
-function ModuleCard({ module, grades, onGradeChange, index, t, accent }: {
-  module: SemesterModule; grades: Grades;
+function ModuleCard({
+  module,
+  grades,
+  onGradeChange,
+  index,
+  t,
+  accent,
+}: {
+  module: SemesterModule;
+  grades: Grades;
   onGradeChange: (field: GradeField, value: string) => void;
-  index: number; t: Translation; accent: { hex: string; soft: string; softer: string };
+  index: number;
+  t: Translation;
+  accent: { hex: string; soft: string; softer: string };
 }) {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const moduleAverage = calculateModuleAverage(module, grades);
+
   useEffect(() => {
     if (!cardRef.current) return;
     gsap.fromTo(cardRef.current, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, delay: index * 0.06, ease: 'power3.out' });
   }, [index, module.id]);
+
   const handleInputChange = (field: GradeField, value: string) => {
     if (!canAcceptInput(value)) return;
     onGradeChange(field, value.replace(',', '.'));
   };
+
   const handleBlur = (field: GradeField, value: string) => onGradeChange(field, sanitizeGradeInput(value));
+
   return (
     <div ref={cardRef} className="module-card">
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: accent.soft, color: accent.hex }}>{module.icon}</div>
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: accent.soft, color: accent.hex }}>
+            {module.icon}
+          </div>
           <div>
             <h3 className="font-semibold text-ce-dark leading-snug">{module.label}</h3>
             <p className="text-sm text-ce-concrete">{t.coeff}: {module.coefficient}</p>
           </div>
         </div>
         {moduleAverage !== null && (
-          <div className="px-3 py-1 rounded-full text-sm font-semibold" style={{ backgroundColor: accent.soft, color: accent.hex }}>{moduleAverage.toFixed(2)}</div>
+          <div className="px-3 py-1 rounded-full text-sm font-semibold" style={{ backgroundColor: accent.soft, color: accent.hex }}>
+            {moduleAverage.toFixed(2)}
+          </div>
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {module.assessments.map((assessment) => (
           <div key={`${module.id}-${assessment.field}`}>
-            <label className="block text-sm font-medium text-ce-gray mb-2">{t[assessment.field]} ({assessment.weight}%)</label>
-            <input type="text" inputMode="decimal" value={grades[assessment.field]}
+            <label className="block text-sm font-medium text-ce-gray mb-2">
+              {t[assessment.field]} ({assessment.weight}%)
+            </label>
+            <input
+              type="text"
+              inputMode="decimal"
+              value={grades[assessment.field]}
               onChange={(e) => handleInputChange(assessment.field, e.target.value)}
               onBlur={(e) => handleBlur(assessment.field, e.target.value)}
-              placeholder="--" className="ce-input text-center py-2.5 text-sm" />
+              placeholder="--"
+              className="ce-input text-center py-2.5 text-sm"
+            />
           </div>
         ))}
       </div>
@@ -359,9 +406,15 @@ const yearIcons: Record<YearId, React.ReactNode> = {
   y4: <Award className="w-7 h-7" />,
 };
 
-function App() {
-  const [lang, setLang] = useState<Language>('fr');
-  const [selectedYear, setSelectedYear] = useState<YearId | null>(null);
+export default function App({
+  year,
+  lang,
+  onLanguageChange,
+}: {
+  year: YearId;
+  lang: Language;
+  onLanguageChange: (lang: Language) => void;
+}) {
   const [subPage, setSubPage] = useState<SubPage>('odd');
   const [gradesBySemester, setGradesBySemester] = useState<Record<SemesterKey, ModuleGrades>>(() => {
     const initial = {} as Record<SemesterKey, ModuleGrades>;
@@ -370,40 +423,50 @@ function App() {
     });
     return initial;
   });
+
   const heroRef = useRef<HTMLDivElement | null>(null);
   const resultRef = useRef<HTMLDivElement | null>(null);
   const t = translations[lang];
 
-  const oddKey = selectedYear ? yearSemesters[selectedYear][0] : null;
-  const evenKey = selectedYear ? yearSemesters[selectedYear][1] : null;
+  const oddKey = yearSemesters[year][0];
+  const evenKey = yearSemesters[year][1];
   const activeKey = subPage === 'even' ? evenKey : oddKey;
-  const activeModules = activeKey ? semesterConfigs[activeKey] : [];
-  const activeGrades = activeKey ? gradesBySemester[activeKey] : {};
-  const accent = selectedYear ? yearAccent[selectedYear] : yearAccent.y3;
+  const activeModules = semesterConfigs[activeKey];
+  const activeGrades = gradesBySemester[activeKey];
+  const accent = yearAccent[year];
 
-  const oddStats = useMemo(() => oddKey ? calculateSemesterStats(semesterConfigs[oddKey], gradesBySemester[oddKey]) : null, [oddKey, gradesBySemester]);
-  const evenStats = useMemo(() => evenKey ? calculateSemesterStats(semesterConfigs[evenKey], gradesBySemester[evenKey]) : null, [evenKey, gradesBySemester]);
+  const oddStats = useMemo(
+    () => calculateSemesterStats(semesterConfigs[oddKey], gradesBySemester[oddKey]),
+    [oddKey, gradesBySemester]
+  );
+  const evenStats = useMemo(
+    () => calculateSemesterStats(semesterConfigs[evenKey], gradesBySemester[evenKey]),
+    [evenKey, gradesBySemester]
+  );
   const activeStats = subPage === 'even' ? evenStats : oddStats;
 
-  const annualReady = !!(oddStats && evenStats && oddStats.completedModules > 0 && evenStats.completedModules > 0);
-  const annualAverage = annualReady ? ((oddStats as any).average + (evenStats as any).average) / 2 : 0;
+  const annualReady = !!(oddStats.completedModules > 0 && evenStats.completedModules > 0);
+  const annualAverage = annualReady ? (oddStats.average + evenStats.average) / 2 : 0;
+  const displayedAverage = subPage === 'annual' ? annualAverage : activeStats.average;
+  const gradeColor = getGradeColor(displayedAverage);
+  const currentYearLabel = yearLabels[lang][year];
 
   const handleGradeChange = useCallback((semesterKey: SemesterKey, moduleId: string, field: GradeField, value: string) => {
     setGradesBySemester((prev) => ({
       ...prev,
-      [semesterKey]: { ...prev[semesterKey], [moduleId]: { ...prev[semesterKey][moduleId], [field]: value } },
+      [semesterKey]: {
+        ...prev[semesterKey],
+        [moduleId]: {
+          ...prev[semesterKey][moduleId],
+          [field]: value,
+        },
+      },
     }));
   }, []);
 
   const handleReset = () => {
-    if (!activeKey) return;
+    if (subPage === 'annual') return;
     setGradesBySemester((prev) => ({ ...prev, [activeKey]: buildInitialGrades(semesterConfigs[activeKey]) }));
-  };
-
-  const handleSelectYear = (yearId: YearId) => {
-    setSelectedYear(yearId);
-    setSubPage('odd');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const scrollToResult = () => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -424,55 +487,117 @@ function App() {
       gsap.fromTo('.hero-cta, .selector-card, .info-card, .result-card', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.08, delay: 0.35, ease: 'power3.out' });
     }, heroRef);
     return () => ctx.revert();
-  }, [selectedYear, lang]);
+  }, [year, lang]);
 
-  const isPlaceholderYear = selectedYear === 'y1' || selectedYear === 'y2' || selectedYear === 'y4';
-
-  if (!selectedYear) {
+  if (subPage === 'annual') {
     return (
-      <div ref={heroRef} className="min-h-screen relative overflow-hidden bg-ce-dark text-white">
-        <div className="absolute inset-0 bg-gradient-to-br from-ce-dark via-ce-gray to-ce-dark" />
-        <div className="absolute inset-0 blueprint-grid opacity-10" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-screen flex flex-col">
-          <div className="flex justify-end"><LanguageSwitcher currentLang={lang} onLanguageChange={setLang} /></div>
-          <div className="flex-1 flex items-center">
-            <div className="w-full">
-              <div className="text-center max-w-4xl mx-auto mb-12">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ce-yellow/10 border border-ce-yellow/20 text-ce-yellow mb-6">
-                  <Calculator className="w-4 h-4" /><span className="text-sm font-medium">{t.selectorHint}</span>
-                </div>
-                <h1 className="hero-title text-5xl md:text-7xl font-bold font-poppins mb-5">{t.title} <span className="text-ce-yellow">{t.titleHighlight}</span></h1>
-                <p className="hero-subtitle text-xl md:text-2xl text-gray-300 mb-3">{t.homeSubtitle}</p>
-                <p className="hero-subtitle text-base md:text-lg text-gray-400 max-w-2xl mx-auto">{t.homeDescription}</p>
+      <div className="min-h-screen bg-background text-foreground">
+        <section ref={heroRef} className="relative overflow-hidden bg-ce-dark text-white">
+          <div className="absolute inset-0 bg-gradient-to-br from-ce-dark via-ce-gray to-ce-dark" />
+          <div className="absolute inset-0 blueprint-grid opacity-10" />
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-14">
+              <Link to="/" className="ce-btn-secondary inline-flex items-center gap-2 self-start">
+                <ArrowLeft className="w-4 h-4" /> {t.backHome}
+              </Link>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSubPage('odd')}
+                  className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  style={{ backgroundColor: accent.hex, color: '#1a1a1a' }}
+                >
+                  {semesterLabels[lang][oddKey]}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSubPage('even')}
+                  className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  style={{ backgroundColor: accent.hex, color: '#1a1a1a' }}
+                >
+                  {semesterLabels[lang][evenKey]}
+                </button>
               </div>
-              <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6 max-w-6xl mx-auto">
-                {(['y1', 'y2', 'y3', 'y4'] as YearId[]).map((yearId) => {
-                  const a = yearAccent[yearId];
-                  return (
-                    <button key={yearId} type="button" onClick={() => handleSelectYear(yearId)}
-                      className="selector-card ce-card glass-panel text-left p-8 group"
-                      style={{ borderTop: `3px solid ${a.hex}` }}>
-                      <div className="flex items-center justify-between mb-6">
-                        <div className="w-14 h-14 rounded-2xl flex items-center justify-center" style={{ backgroundColor: a.soft, color: a.hex }}>{yearIcons[yearId]}</div>
-                        <div className="text-sm font-semibold" style={{ color: a.hex }}>{t.startButton}</div>
-                      </div>
-                      <h2 className="text-2xl font-bold font-poppins text-ce-dark mb-2">{yearLabels[lang][yearId]}</h2>
-                      <p className="text-ce-concrete mb-5">{semesterLabels[lang][yearSemesters[yearId][0]]} · {semesterLabels[lang][yearSemesters[yearId][1]]}</p>
-                      <div className="flex items-center font-medium group-hover:translate-x-1 transition-transform" style={{ color: a.hex }}>{t.startButton}<span className="ml-2">→</span></div>
-                    </button>
-                  );
-                })}
+            </div>
+
+            <div className="text-center max-w-4xl mx-auto pb-16">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style={{ backgroundColor: accent.soft, border: `1px solid ${accent.softer}`, color: accent.hex }}>
+                <TrendingUp className="w-4 h-4" /><span className="text-sm font-medium">{currentYearLabel}</span>
+              </div>
+              <h1 className="hero-title text-5xl md:text-7xl font-bold font-poppins mb-5">{t.title} <span style={{ color: accent.hex }}>{t.titleHighlight}</span></h1>
+              <p className="hero-subtitle text-xl md:text-2xl text-gray-300 mb-3">{currentYearLabel} - {t.homeSubtitle}</p>
+              <p className="hero-subtitle text-base md:text-lg text-gray-400 max-w-3xl mx-auto mb-8">{t.annualDescription}</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="relative py-20">
+          <div className="absolute inset-0 blueprint-grid opacity-30" />
+          <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="ce-card p-6 mb-8">
+              <div className="grid md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <label className="block text-sm font-medium text-ce-gray mb-2">{t.annualAverageLabel} - {semesterLabels[lang][oddKey]}</label>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={gradesBySemester[oddKey]?.__annual ?? ''}
+                    onChange={() => {}}
+                    placeholder="--"
+                    className="ce-input text-center py-3"
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-ce-gray mb-2">{t.annualAverageLabel} - {semesterLabels[lang][evenKey]}</label>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={gradesBySemester[evenKey]?.__annual ?? ''}
+                    onChange={() => {}}
+                    placeholder="--"
+                    className="ce-input text-center py-3"
+                    readOnly
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-3 justify-center">
+                <button type="button" onClick={scrollToResult} className="ce-btn inline-flex items-center gap-2" style={{ backgroundColor: accent.hex, borderColor: accent.hex }}>
+                  <CheckCircle2 className="w-4 h-4" /> {t.calculateButton}
+                </button>
+                <button type="button" onClick={handleReset} className="ce-btn-secondary inline-flex items-center gap-2">
+                  <RotateCcw className="w-4 h-4" /> {t.resetButton}
+                </button>
               </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        <section ref={resultRef} className="py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="result-card result-display">
+              <div className="relative z-10 text-center">
+                <p className="font-medium mb-3" style={{ color: accent.hex }}>{t.resultTitle}</p>
+                <h2 className="text-3xl md:text-4xl font-bold font-poppins mb-4">{t.annualAverageLabel}</h2>
+                <div className={`text-6xl md:text-7xl font-bold font-poppins mb-3 ${gradeColor}`}>
+                  <AnimatedCounter value={annualAverage} />/20
+                </div>
+                <div className="flex items-center justify-center gap-3">
+                  {annualReady && annualAverage >= 10 ? (
+                    <CheckCircle2 className="w-6 h-6 text-green-400" />
+                  ) : (
+                    <AlertCircle className="w-6 h-6 text-red-400" />
+                  )}
+                  <span className="text-xl font-semibold">{getGradeLabel(annualAverage)}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     );
   }
-
-  const displayedAverage = subPage === 'annual' ? annualAverage : (activeStats?.average ?? 0);
-  const gradeColor = getGradeColor(displayedAverage);
-  const currentYearLabel = yearLabels[lang][selectedYear];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -481,27 +606,26 @@ function App() {
         <div className="absolute inset-0 blueprint-grid opacity-10" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-14">
-            <button type="button" onClick={() => setSelectedYear(null)} className="ce-btn-secondary inline-flex items-center gap-2 self-start"><ArrowLeft className="w-4 h-4" />{t.backHome}</button>
-            <LanguageSwitcher currentLang={lang} onLanguageChange={setLang} />
+            <Link to="/" className="ce-btn-secondary inline-flex items-center gap-2 self-start">
+              <ArrowLeft className="w-4 h-4" /> {t.backHome}
+            </Link>
+            <button
+              type="button"
+              onClick={() => setSubPage('annual')}
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              style={{ backgroundColor: accent.hex, color: '#1a1a1a' }}
+            >
+              {t.annualTab}
+            </button>
           </div>
+
           <div className="text-center max-w-4xl mx-auto pb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style={{ backgroundColor: accent.soft, border: `1px solid ${accent.softer}`, color: accent.hex }}>
               <TrendingUp className="w-4 h-4" /><span className="text-sm font-medium">{currentYearLabel}</span>
             </div>
             <h1 className="hero-title text-5xl md:text-7xl font-bold font-poppins mb-5">{t.title} <span style={{ color: accent.hex }}>{t.titleHighlight}</span></h1>
             <p className="hero-subtitle text-xl md:text-2xl text-gray-300 mb-3">{currentYearLabel} - {t.homeSubtitle}</p>
-            {isPlaceholderYear && (
-              <p className="hero-subtitle text-sm max-w-2xl mx-auto mb-2" style={{ color: accent.hex }}>{t.placeholderNotice}</p>
-            )}
-            <div className="flex items-center justify-center gap-3 mt-6">
-              {(['odd', 'even', 'annual'] as SubPage[]).map((sp) => (
-                <button key={sp} type="button" onClick={() => setSubPage(sp)}
-                  className="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                  style={subPage === sp ? { backgroundColor: accent.hex, color: '#1a1a1a' } : { backgroundColor: 'rgba(255,255,255,0.1)', color: '#fff' }}>
-                  {sp === 'odd' ? semesterLabels[lang][yearSemesters[selectedYear][0]] : sp === 'even' ? semesterLabels[lang][yearSemesters[selectedYear][1]] : t.annualTab}
-                </button>
-              ))}
-            </div>
+            <p className="hero-subtitle text-base md:text-lg text-gray-400 max-w-3xl mx-auto mb-8">{t.modulesDescription}</p>
           </div>
         </div>
       </section>
@@ -509,33 +633,41 @@ function App() {
       <section className="relative py-20">
         <div className="absolute inset-0 blueprint-grid opacity-30" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {subPage === 'annual' ? (
-            <div className="text-center mb-10 max-w-3xl mx-auto">
-              <h2 className="text-4xl font-bold font-poppins text-ce-dark mb-4">{t.annualTab}</h2>
-              <p className="text-lg text-ce-concrete">{t.annualDescription}</p>
+          <div className="ce-card p-6 mb-8">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+              <div>
+                <h3 className="text-lg font-semibold text-ce-dark">{t.progress}</h3>
+                <p className="text-sm text-ce-concrete">
+                  {Math.round(activeStats.progressPercent)}% • {activeStats.countedCoeff} / {activeStats.totalAvailableCoeff} {t.coeffFilled}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <button type="button" onClick={scrollToResult} className="ce-btn inline-flex items-center gap-2" style={{ backgroundColor: accent.hex, borderColor: accent.hex }}>
+                  <CheckCircle2 className="w-4 h-4" /> {t.calculateButton}
+                </button>
+                <button type="button" onClick={handleReset} className="ce-btn-secondary inline-flex items-center gap-2">
+                  <RotateCcw className="w-4 h-4" /> {t.resetButton}
+                </button>
+              </div>
             </div>
-          ) : (
-            <>
-              <div className="text-center mb-10"><h2 className="text-4xl font-bold font-poppins text-ce-dark mb-4">{t.modulesTitle}</h2><p className="text-lg text-ce-concrete max-w-3xl mx-auto">{t.modulesDescription}</p></div>
-              <div className="ce-card p-6 mb-8">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-                  <div><h3 className="text-lg font-semibold text-ce-dark">{t.progress}</h3><p className="text-sm text-ce-concrete">{Math.round(activeStats?.progressPercent ?? 0)}% • {activeStats?.countedCoeff ?? 0} / {activeStats?.totalAvailableCoeff ?? 0} {t.coeffFilled}</p></div>
-                  <div className="flex flex-wrap gap-3">
-                    <button type="button" onClick={scrollToResult} className="ce-btn inline-flex items-center gap-2" style={{ backgroundColor: accent.hex, borderColor: accent.hex }}><CheckCircle2 className="w-4 h-4" />{t.calculateButton}</button>
-                    <button type="button" onClick={handleReset} className="ce-btn-secondary inline-flex items-center gap-2"><RotateCcw className="w-4 h-4" />{t.resetButton}</button>
-                  </div>
-                </div>
-                <div className="h-2 bg-ce-border rounded-full overflow-hidden"><div className="h-full rounded-full transition-all duration-500" style={{ width: `${activeStats?.progressPercent ?? 0}%`, backgroundColor: accent.hex }} /></div>
-              </div>
-              <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                {activeModules.map((module, index) => (
-                  <ModuleCard key={module.id} module={module} grades={activeGrades[module.id] ?? emptyGrades}
-                    onGradeChange={(field, value) => activeKey && handleGradeChange(activeKey, module.id, field, value)}
-                    index={index} t={t} accent={accent} />
-                ))}
-              </div>
-            </>
-          )}
+            <div className="h-2 bg-ce-border rounded-full overflow-hidden">
+              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${activeStats.progressPercent}%`, backgroundColor: accent.hex }} />
+            </div>
+          </div>
+
+          <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            {activeModules.map((module, index) => (
+              <ModuleCard
+                key={module.id}
+                module={module}
+                grades={activeGrades[module.id] ?? emptyGrades}
+                onGradeChange={(field, value) => handleGradeChange(activeKey, module.id, field, value)}
+                index={index}
+                t={t}
+                accent={accent}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
@@ -545,42 +677,44 @@ function App() {
             <div className="relative z-10">
               <div className="text-center mb-10">
                 <p className="font-medium mb-3" style={{ color: accent.hex }}>{t.resultTitle}</p>
-                <h2 className="text-3xl md:text-4xl font-bold font-poppins mb-4">{subPage === 'annual' ? t.annualAverageLabel : t.yourAverage}</h2>
-                <div className={`text-6xl md:text-7xl font-bold font-poppins mb-3 ${gradeColor}`}><AnimatedCounter value={displayedAverage} />/20</div>
+                <h2 className="text-3xl md:text-4xl font-bold font-poppins mb-4">{t.yourAverage}</h2>
+                <div className={`text-6xl md:text-7xl font-bold font-poppins mb-3 ${gradeColor}`}>
+                  <AnimatedCounter value={displayedAverage} />/20
+                </div>
                 <div className="flex items-center justify-center gap-3">
-                  {displayedAverage >= 10 && (subPage !== 'annual' || annualReady) ? <CheckCircle2 className="w-6 h-6 text-green-400" /> : <AlertCircle className="w-6 h-6 text-red-400" />}
+                  {displayedAverage >= 10 ? (
+                    <CheckCircle2 className="w-6 h-6 text-green-400" />
+                  ) : (
+                    <AlertCircle className="w-6 h-6 text-red-400" />
+                  )}
                   <span className="text-xl font-semibold">{getGradeLabel(displayedAverage)}</span>
                 </div>
               </div>
+
               <div className="grid md:grid-cols-3 gap-4">
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10"><div className="text-3xl font-bold mb-1" style={{ color: accent.hex }}>{oddStats && oddStats.completedModules > 0 ? oddStats.average.toFixed(2) : '--'}</div><div className="text-sm text-gray-300">{semesterLabels[lang][yearSemesters[selectedYear][0]]}</div></div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10"><div className="text-3xl font-bold mb-1" style={{ color: accent.hex }}>{evenStats && evenStats.completedModules > 0 ? evenStats.average.toFixed(2) : '--'}</div><div className="text-sm text-gray-300">{semesterLabels[lang][yearSemesters[selectedYear][1]]}</div></div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10"><div className="text-3xl font-bold mb-1" style={{ color: accent.hex }}>{activeStats?.countedCoeff ?? 0}</div><div className="text-sm text-gray-300">{t.coefficients}</div></div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+                  <div className="text-3xl font-bold mb-1" style={{ color: accent.hex }}>
+                    {oddStats.completedModules > 0 ? oddStats.average.toFixed(2) : '--'}
+                  </div>
+                  <div className="text-sm text-gray-300">{semesterLabels[lang][oddKey]}</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+                  <div className="text-3xl font-bold mb-1" style={{ color: accent.hex }}>
+                    {evenStats.completedModules > 0 ? evenStats.average.toFixed(2) : '--'}
+                  </div>
+                  <div className="text-sm text-gray-300">{semesterLabels[lang][evenKey]}</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+                  <div className="text-3xl font-bold mb-1" style={{ color: accent.hex }}>
+                    {activeStats.countedCoeff}
+                  </div>
+                  <div className="text-sm text-gray-300">{t.coefficients}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
-
-      <section className="py-20 bg-ce-light/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="construction-line mb-16" />
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="info-card ce-card p-8"><div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5" style={{ backgroundColor: accent.soft, color: accent.hex }}><Award className="w-7 h-7" /></div><h3 className="text-xl font-bold mb-3 text-ce-dark">{t.precision}</h3><p className="text-ce-concrete leading-relaxed">{t.precisionDesc}</p></div>
-            <div className="info-card ce-card p-8"><div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5" style={{ backgroundColor: accent.soft, color: accent.hex }}><Building2 className="w-7 h-7" /></div><h3 className="text-xl font-bold mb-3 text-ce-dark">{t.structure}</h3><p className="text-ce-concrete leading-relaxed">{t.structureDesc}</p></div>
-            <div className="info-card ce-card p-8"><div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5" style={{ backgroundColor: accent.soft, color: accent.hex }}><TrendingUp className="w-7 h-7" /></div><h3 className="text-xl font-bold mb-3 text-ce-dark">{t.performance}</h3><p className="text-ce-concrete leading-relaxed">{t.performanceDesc}</p></div>
-          </div>
-        </div>
-      </section>
-
-      <footer className="bg-ce-dark text-white py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-2xl font-bold font-poppins mb-2">{t.footerTitle}</h3>
-          <p className="text-gray-400">{t.footerSubtitle} - {currentYearLabel}</p>
-        </div>
-      </footer>
     </div>
   );
 }
-
-export default App;
