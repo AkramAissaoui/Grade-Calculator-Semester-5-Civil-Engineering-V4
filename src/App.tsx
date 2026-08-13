@@ -491,12 +491,7 @@ function App() {
             <h1 className="hero-title text-5xl md:text-7xl font-bold font-poppins mb-5">{t.title} <span style={{ color: accent.hex }}>{t.titleHighlight}</span></h1>
             <p className="hero-subtitle text-xl md:text-2xl text-gray-300 mb-3">{currentYearLabel} - {t.homeSubtitle}</p>
             {isPlaceholderYear && (
-              <p
-                className="hero-subtitle text-sm max-w-2xl mx-auto mb-2"
-                style={{ color: accent.hex }}
-              >
-                {t.placeholderNotice}
-              </p>
+              <p className="hero-subtitle text-sm max-w-2xl mx-auto mb-2" style={{ color: accent.hex }}>{t.placeholderNotice}</p>
             )}
             <div className="flex items-center justify-center gap-3 mt-6">
               {(['odd', 'even', 'annual'] as SubPage[]).map((sp) => (
