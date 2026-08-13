@@ -270,66 +270,6 @@ function AnimatedCounter({ value, duration = 1200 }: { value: number; duration?:
   return <>{displayValue.toFixed(2)}</>;
 }
 
-function LanguageSwitcher({
-  currentLang,
-  onLanguageChange,
-}: {
-  currentLang: Language;
-  onLanguageChange: (lang: Language) => void;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) setIsOpen(false);
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const languages: { code: Language; label: string; flag: string }[] = [
-    { code: 'fr', label: 'Français', flag: 'FR' },
-    { code: 'en', label: 'English', flag: 'EN' },
-    { code: 'ar', label: 'العربية', flag: 'AR' },
-  ];
-
-  const currentLanguage = languages.find((l) => l.code === currentLang);
-
-  return (
-    <div className="relative" ref={dropdownRef}>
-      <button
-        type="button"
-        onClick={() => setIsOpen((p) => !p)}
-        className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg text-white transition-all duration-300 border border-white/20"
-      >
-        <span className="text-sm font-medium">{currentLanguage?.label}</span>
-        <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-ce-lg border border-ce-border overflow-hidden z-50">
-          {languages.map((language) => (
-            <button
-              key={language.code}
-              type="button"
-              onClick={() => {
-                onLanguageChange(language.code);
-                setIsOpen(false);
-              }}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
-                currentLang === language.code ? 'bg-ce-yellow/10 text-ce-yellow' : 'text-ce-dark hover:bg-ce-light'
-              }`}
-            >
-              <span className="text-xs font-semibold w-6">{language.flag}</span>
-              <span className="text-sm font-medium">{language.label}</span>
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 function ModuleCard({
   module,
   grades,
@@ -403,11 +343,9 @@ function ModuleCard({
 export default function App({
   year,
   lang,
-  onLanguageChange,
 }: {
   year: YearId;
   lang: Language;
-  onLanguageChange: (lang: Language) => void;
 }) {
   const [subPage, setSubPage] = useState<SubPage>('odd');
   const [gradesBySemester, setGradesBySemester] = useState<Record<SemesterKey, ModuleGrades>>(() => {
