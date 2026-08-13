@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import {
   Calculator, HardHat, Building2, Ruler, PenTool, DraftingCompass, Mountain,
-  BookOpen, ChevronDown, RotateCcw, CheckCircle2, AlertCircle, TrendingUp, Award, Globe, ArrowLeft,
+  BookOpen, RotateCcw, CheckCircle2, AlertCircle, TrendingUp, Award, Globe, ArrowLeft,
 } from 'lucide-react';
 import './App.css';
 
